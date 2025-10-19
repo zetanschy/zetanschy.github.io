@@ -36,7 +36,7 @@
                 </p>
               </td>
               <td style="padding:2.5%;width:37%;max-width:37%">
-                <a href="images/photo.jpeg"><img style="width:100%;max-width:100%;object-fit: cover; border-radius: 50%;" alt="profile photo" src="images/photo.jpeg" class="hoverZoomLink"></a>
+                <a href="images/photo.jpeg"><img style="width:100%;max-width:100%;height:275px;object-fit: cover; object-position: center; border-radius: 50%;" alt="profile photo" src="images/photo.jpeg" class="hoverZoomLink"></a>
               </td>
             </tr>
           </tbody></table>
@@ -52,15 +52,14 @@
           </tbody></table>
           <table style="width:100%;border:0px;border-spacing:0px 10px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
 
-    <tr onmouseout="tactile_stop()" onmouseover="tactile_start()"  bgcolor="#ffffd0">
+    <tr onmouseout="tactile_stop()" onmouseover="tactile_start()">
       <td style="padding:16px;width:20%;vertical-align:middle">
         <div class="one">
-          <div class="two" id='tactile_image'><video  width=100% height=100% muted autoplay loop>
-          <source src="images/tactile_sensing.mp4" type="video/mp4">
+          <div class="two" id='tactile_image'><video  width=100% height=100% muted autoplay loop style="object-fit: cover; object-position: 90% 10%; border-radius: 5%;">
+          <source src="images/humanoids.mp4" type="video/mp4">
           Your browser does not support the video tag.
-
           </video></div>
-          <img src='images/tactile_sensing.jpg' width="160">
+          <img src='images/humanoids.png' width="100%" height="100%" style="border-radius: 5%; object-fit: cover; object-position: 85% center; display: block; margin: 0 auto;">
         </div>
         <script type="text/javascript">
           function tactile_start() {
@@ -78,21 +77,16 @@
           <span class="papertitle">Adding internal audio sensing to internal vision enables human-like in-hand fabric recognition with soft robotic fingertips</span>
         </a>
         <br>
-        <a href="https://scholar.google.com/citations?user=YOUR_ID">I. Andrussow</a>,
+        I. Andrussow,
         <strong>J. Solano</strong>,
-        <a href="https://scholar.google.com/citations?user=YOUR_ID">B. Richardson</a>,
-        <a href="https://scholar.google.com/citations?user=YOUR_ID">G. Martius</a>,
-        <a href="https://scholar.google.com/citations?user=YOUR_ID">K. Kuchenbecker</a>
+        B. Richardson,
+        G. Martius,
+        K. Kuchenbecker
         <br>
         <em>IEEE Humanoids</em>, 2025
         <br>
-        <a href="https://ieeexplore.ieee.org/document/your-paper-id">paper</a>
-        /
-        <a href="https://arxiv.org/abs/your-arxiv-id">arXiv</a>
+        <a href="https://sites.google.com/view/multimodaltouch">Website</a>
         <p></p>
-        <p>
-		We integrate audio sensing with vision in soft robotic fingertips to enable human-like material recognition through multimodal tactile perception.
-        </p>
       </td>
     </tr>
 
@@ -100,9 +94,9 @@
       <td style="padding:16px;width:20%;vertical-align:middle">
         <div class="one">
           <div class="two" id='inspection_image'>
-					  <img src='images/inspection_robot.png' width=100%>
+					  <img src='images/intercon.jpg' width="160" style="border-radius: 5%; object-fit: cover;">
 					</div>
-          <img src='images/inspection_robot.png' width=100%>
+          <img src='images/intercon.jpg' width="160" style="border-radius: 5%; object-fit: cover;">
         </div>
         <script type="text/javascript">
           function inspection_start() {
@@ -116,34 +110,33 @@
         </script>
       </td>
       <td style="padding:8px;width:80%;vertical-align:middle">
-        <a href="https://ieeexplore.ieee.org/document/your-paper-id">
+        <a href="https://ieeexplore.ieee.org/document/10326039">
 			<span class="papertitle">Design and Implementation of an Inspection Robot for Crack Detection in Flooded Pipes
 </span>
         </a>
         <br>
 				<strong>J. Solano</strong>, 
-				<a href="https://scholar.google.com/citations?user=YOUR_ID">J. Cisneros</a>,
-				<a href="https://scholar.google.com/citations?user=YOUR_ID">L. Sarmiento</a>,
-        <a href="https://scholar.google.com/citations?user=YOUR_ID">et al.</a>
+				J. Cisneros,
+				L. Sarmiento,
+        et al.
 				<br>
         <em>IEEE INTERCON</em>, 2023
         <br>
-        <a href="https://ieeexplore.ieee.org/document/your-paper-id">paper</a>
+        <a href="https://ieeexplore.ieee.org/document/10326039">Paper</a>
         <p></p>
-        <p>
-				We developed an autonomous inspection robot capable of detecting cracks in flooded pipes using computer vision and robotic navigation.
-        </p>
       </td>
     </tr>
 
-    <tr onmouseout="drl_stop()" onmouseover="drl_start()" bgcolor="#ffffd0">
+    <tr onmouseout="drl_stop()" onmouseover="drl_start()">
       <td style="padding:16px;width:20%;vertical-align:middle">
         <div class="one">
-          <div class="two" id='drl_image'><video  width=100% height=100% muted autoplay loop>
-          <source src="images/drl_navigation.mp4" type="video/mp4">
+          <div class="two" id='drl_image'>
+          <img src="images/sensorsx5.gif" width="100%" height="100%" style="object-fit: cover; object-position: center; border-radius: 5%;">
+          </div>
+          <video id="sensors2_video" width="160" height="160" muted autoplay loop style="border-radius: 5%; object-fit: cover; object-position: center;">
+          <source src="images/sensors2.mkv" type="video/mp4">
           Your browser does not support the video tag.
-          </video></div>
-          <img src='images/drl_navigation.jpg' width="160">
+          </video>
         </div>
         <script type="text/javascript">
           function drl_start() {
@@ -162,17 +155,14 @@
 </span>
         </a>
         <br>
-				<a href="https://scholar.google.com/citations?user=YOUR_ID">D. Arce</a>,
+				D. Arce,
 				<strong>J. Solano</strong>,
-				<a href="https://scholar.google.com/citations?user=YOUR_ID">C. Beltrán</a>
+				C. Beltrán
         <br>
         <em>Sensors</em>, 2023
         <br>
-        <a href="https://www.mdpi.com/1424-8220/23/1/123">paper</a>
+        <a href="https://www.mdpi.com/1424-8220/23/1/123">Paper</a>
         <p></p>
-        <p>
-				We compared classical and deep reinforcement learning algorithms for autonomous navigation in simulation, evaluating mapping, localization, and DRL-based planners in dynamic environments.
-        </p>
       </td>
     </tr>
 
@@ -189,9 +179,27 @@
           </tbody></table>
           <table style="width:100%;border:0px;border-spacing:0px 10px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
 
-            <tr>
+            <tr onmouseout="quadruped_stop()" onmouseover="quadruped_start()">
               <td style="padding:16px;width:20%;vertical-align:middle">
-                <img src='images/quadruped_robot.jpg' width="160">
+                <div class="one">
+                  <div class="two" id='quadruped_image'>
+                  <img src='images/out_loco.gif' width="100%" height="100%" style="border-radius: 5%; object-fit: cover;">
+                  </div>
+                  <video width="100%" height="100%" muted autoplay loop style="object-fit: contain; object-position: center; border-radius: 5%;">
+                  <source src="images/navx5.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+                </div>
+                <script type="text/javascript">
+                  function quadruped_start() {
+                    document.getElementById('quadruped_image').style.opacity = "1";
+                  }
+
+                  function quadruped_stop() {
+                    document.getElementById('quadruped_image').style.opacity = "0";
+                  }
+                  quadruped_stop()
+                </script>
               </td>
               <td style="padding:8px;width:80%;vertical-align:middle">
                 <a href="#">
@@ -208,11 +216,11 @@
 
             <tr>
               <td style="padding:16px;width:20%;vertical-align:middle">
-                <img src='images/fmri_analysis.jpg' width="160">
+                <img src='images/erc1.png' width="160" height="140" style="border-radius: 5%; object-fit: cover;">
               </td>
               <td style="padding:8px;width:80%;vertical-align:middle">
                 <a href="#">
-                  <span class="papertitle">Multimodal AI for Clinical fMRI Analysis</span>
+                  <span class="papertitle">European Rover Challenge</span>
                 </a>
                 <br>
                 <em>Yale University Research</em>, 2025
@@ -225,11 +233,11 @@
 
             <tr>
               <td style="padding:16px;width:20%;vertical-align:middle">
-                <img src='images/space_challenge.jpg' width="160">
+                <img src='images/cansat.jpg' width="160" style="border-radius: 5%; object-fit: cover;">
               </td>
               <td style="padding:8px;width:80%;vertical-align:middle">
                 <a href="#">
-                  <span class="papertitle">Latin American Space Challenge - Satellite & Cansat</span>
+                  <span class="papertitle">Latin American Space Challenge</span>
                 </a>
                 <br>
                 <em>Competition</em>, 2023
