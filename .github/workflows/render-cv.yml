@@ -27,7 +27,9 @@ jobs:
           pip install -r requirements.txt
       - name: RenderCV
         run: |
-          cv_file=$(find _data  -maxdepth 1 -type f \( -name "cv.yaml" -o -name "cv.yml" \))
+          set -e
+          shopt -s nullglob
+          cv_file=$(find _data -maxdepth 1 -type f \( -name "cv.yaml" -o -name "cv.yml" \) | head -1)
           if [ -z "$cv_file" ]; then
             echo "No cv.yml file found!"
             exit 1
@@ -37,13 +39,14 @@ jobs:
             echo "No RenderCV config directory found!"
             exit 1
           fi
-          settings=$(find $rendercv_dir -maxdepth 1 -type f \( -name "settings.yaml" -o -name "settings.yml" \))
+          settings=$(find "$rendercv_dir" -maxdepth 1 -type f \( -name "settings.yaml" -o -name "settings.yml" \) | head -1)
           if [ -z "$settings" ]; then
             echo "Missing RenderCV config file!"
             exit 1
           fi
-          rendercv render $cv_file --settings $settings
-          rm assets/rendercv/rendercv_output/*.typ
+          mkdir -p assets/rendercv/rendercv_output
+          rendercv render "$cv_file" --settings "$settings"
+          rm -f assets/rendercv/rendercv_output/*.typ
       - name: Upload rendercv_output as an artifact
         uses: actions/upload-artifact@v4
         with:
@@ -54,5 +57,9 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git add -A
-          git commit -m "chore: render the latest CV"
-          git push
+          if git diff --staged --quiet; then
+            echo "No CV output changes to commit."
+          else
+            git commit -m "chore: render the latest CV"
+            git push
+          fi
