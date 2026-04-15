@@ -70,7 +70,7 @@ ul.task-list input[type="checkbox"] {
     margin: 0;
     width: 100%;
     max-width: 200px;
-    aspect-ratio: 0.8;
+    aspect-ratio: 0.9;
     overflow: hidden;
     border-radius: 50%;
   }
@@ -115,6 +115,28 @@ ul.task-list input[type="checkbox"] {
 
   figure {
     margin-right: auto;
+  }
+}
+
+// Stack and center headshot on phones (float + margin-left: auto looked right-aligned)
+@media (max-width: 575.98px) {
+  .profile {
+    float: none !important;
+    width: 100%;
+    max-width: none;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 1rem;
+    text-align: center;
+
+    figure {
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    .more-info {
+      text-align: center;
+    }
   }
 }
 
