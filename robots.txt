@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://zetanschy.github.io/sitemap.xml
