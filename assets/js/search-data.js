@@ -25,14 +25,14 @@ ninja.data = [{
           },
         },{id: "nav-teaching",
           title: "Teaching",
-          description: "Teaching, TA work, and mentorship.",
+          description: "",
           section: "Navigation",
           handler: () => {
             window.location.href = "/teaching/";
           },
         },{id: "nav-cv",
           title: "CV",
-          description: "Curriculum vitae (PDF).",
+          description: "",
           section: "Navigation",
           handler: () => {
             window.location.href = "/cv/";
