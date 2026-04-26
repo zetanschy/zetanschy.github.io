@@ -2,7 +2,7 @@
 layout: page
 permalink: /teaching/
 title: Teaching
-description: Teaching, TA work, and mentorship.
+# description: Teaching, TA work, and mentorship.
 nav: true
 nav_order: 3
 nav_icon: fa-solid fa-chalkboard-user
