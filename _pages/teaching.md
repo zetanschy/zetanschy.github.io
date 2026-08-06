@@ -9,8 +9,8 @@ nav_icon: fa-solid fa-chalkboard-user
 ---
 
 **Lecturer – ROS2 Specialization Program** — Pontifical Catholic University of Peru (PUCP)  
-_Oct 2025 – Feb 2026_  
-Lecturer for two courses: Mobile Robot Navigation and Robot Manipulation. Focus on applied autonomy using ROS2: Nav2, MoveIt.
+_Oct 2025 – Present_  
+Lecturer for three courses: Introduction to ROS2, Mobile Robot Navigation, and Robot Manipulation. Focus on applied autonomy using ROS2: Nav2, MoveIt.
 
 **Mentor – Robotics Camp and Hackathon** — Mision Tech  
 _Aug 2025_  
