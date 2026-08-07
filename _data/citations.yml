@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-07-17'
+  last_updated: '2026-08-07'
 papers:
   qst1K0kAAAAJ:2osOgNQ5qMEC:
     citations: 0
@@ -14,10 +14,10 @@ papers:
     title: Adding internal audio sensing to internal vision enables human-like in-hand fabric recognition with soft robotic fingertips
     year: '2025'
   qst1K0kAAAAJ:u-x6o8ySG0sC:
-    citations: 1
+    citations: 2
     title: Design and implementation of an inspection robot for crack detection in flooded pipes
     year: '2023'
   qst1K0kAAAAJ:u5HHmVD_uO8C:
-    citations: 37
+    citations: 36
     title: A comparison study between traditional and deep-reinforcement-learning-based algorithms for indoor autonomous navigation in dynamic scenarios
     year: '2023'
