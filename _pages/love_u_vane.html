@@ -577,14 +577,23 @@ nav: false
 
       /* la rejilla de horas, estilo agenda: se arrastra para marcar el rato */
       .cal {
-        /* media hora; 28 tramos tienen que caber en pantalla sin scroll eterno */
-        --half: clamp(0.72rem, 2.4vw, 0.85rem);
+        /* Media hora. Es un valor plano a propósito: se multiplica dentro de
+           calc() más abajo, y anidar clamp()/vw ahí rompe en varios WebKit
+           (la declaración se invalida y la rejilla se queda sin alto). */
+        --half: 0.85rem;
         --gutter: 3.1rem;
         position: relative;
         margin-left: var(--gutter);
         border-radius: 1rem;
         border: 1px solid var(--glass-line);
         background: rgba(255, 255, 255, 0.035);
+      }
+
+      @media (max-width: 30rem) {
+        .cal {
+          --half: 0.78rem;
+          --gutter: 2.9rem;
+        }
       }
 
       /* altura explícita: así el bloque puede medirse en tramos y no en % */
@@ -1240,10 +1249,12 @@ nav: false
           var drag = null; // "new" | "top" | "bottom"
           var anchor = 0;
           var moved = false;
+          var touch = null;
 
           grid.addEventListener("pointerdown", function (ev) {
             if (ev.pointerType !== "mouse") {
-              tap(slotFrom(ev));
+              // con el dedo esperamos a levantarlo: si se movió, era un scroll
+              touch = { k: slotFrom(ev), y: ev.clientY };
               return;
             }
             ev.preventDefault();
@@ -1267,7 +1278,13 @@ nav: false
             else setRange(state.s, Math.max(k, state.s));
           });
 
-          function endDrag() {
+          function endDrag(ev) {
+            if (touch) {
+              // solo cuenta como toque si el dedo casi no se movió
+              if (ev && ev.type === "pointerup" && Math.abs(ev.clientY - touch.y) < 12) tap(touch.k);
+              touch = null;
+              return;
+            }
             // un clic seco de ratón se comporta igual que un toque: dos horas
             if (drag === "new" && !moved) {
               state.s = null;
