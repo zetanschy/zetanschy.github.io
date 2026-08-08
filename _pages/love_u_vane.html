@@ -350,7 +350,7 @@ nav: false
 
       #btn-yes:hover,
       #btn-yes:focus-visible {
-        transform: translateY(-2px) scale(calc(var(--grow, 1) * 1.04));
+        transform: translateY(-2px) scale(var(--grow, 1));
       }
 
       #btn-no {
@@ -577,9 +577,8 @@ nav: false
 
       /* la rejilla de horas, estilo agenda: se arrastra para marcar el rato */
       .cal {
-        --gutter: 3.1rem;
         position: relative;
-        margin-left: var(--gutter);
+        margin-left: 3.1rem;
         border-radius: 1rem;
         border: 1px solid var(--glass-line);
         background: rgba(255, 255, 255, 0.035);
@@ -602,7 +601,7 @@ nav: false
 
       @media (max-width: 30rem) {
         .cal {
-          --gutter: 2.9rem;
+          margin-left: 2.9rem;
         }
 
         .cal__rows {
@@ -611,6 +610,11 @@ nav: false
 
         .cal__row {
           height: 1.56rem;
+        }
+
+        .cal__t {
+          left: -2.9rem;
+          width: 2.35rem;
         }
       }
 
@@ -628,13 +632,19 @@ nav: false
         border-top: 1px dashed rgba(255, 255, 255, 0.05);
       }
 
+      /* La hora va en el margen, a la izquierda de su línea. Nada de calc() con
+         variables aquí: hay móviles que lo invalidan y la etiqueta se cae dentro
+         de la rejilla. El translateY la centra sobre la línea sin depender de
+         las métricas de la fuente. */
       .cal__t {
         position: absolute;
-        left: calc(var(--gutter) * -1);
-        width: calc(var(--gutter) - 0.55rem);
-        top: -0.62em;
+        left: -3.1rem;
+        width: 2.55rem;
+        top: 0;
+        transform: translateY(-50%);
         text-align: right;
         font-size: 0.66rem;
+        line-height: 1;
         letter-spacing: 0.04em;
         color: var(--ink-faint);
         pointer-events: none;
@@ -1103,9 +1113,10 @@ nav: false
         });
 
         function moveDog(i) {
-          var pct = (i / (PLAN.length - 1)) * 100;
-          stepsFill.style.width = pct + "%";
-          stepsDog.style.left = "calc(1.25rem + (100% - 2.5rem) * " + pct / 100 + ")";
+          var frac = i / (PLAN.length - 1);
+          stepsFill.style.width = frac * 100 + "%";
+          // en px medidos, no en calc(): mismo motivo que la rejilla de horas
+          stepsDog.style.left = stepsTrack.offsetLeft + frac * stepsTrack.offsetWidth + "px";
           stepsTrack.querySelectorAll(".steps__paw").forEach(function (p, n) {
             p.classList.toggle("is-done", n <= i);
           });
