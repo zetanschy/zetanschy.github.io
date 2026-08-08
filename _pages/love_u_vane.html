@@ -577,10 +577,6 @@ nav: false
 
       /* la rejilla de horas, estilo agenda: se arrastra para marcar el rato */
       .cal {
-        /* Media hora. Es un valor plano a propósito: se multiplica dentro de
-           calc() más abajo, y anidar clamp()/vw ahí rompe en varios WebKit
-           (la declaración se invalida y la rejilla se queda sin alto). */
-        --half: 0.85rem;
         --gutter: 3.1rem;
         position: relative;
         margin-left: var(--gutter);
@@ -589,23 +585,33 @@ nav: false
         background: rgba(255, 255, 255, 0.035);
       }
 
-      @media (max-width: 30rem) {
-        .cal {
-          --half: 0.78rem;
-          --gutter: 2.9rem;
-        }
-      }
-
-      /* altura explícita: así el bloque puede medirse en tramos y no en % */
+      /* Los altos van en valores literales, sin calc() ni var(): hay navegadores
+         móviles que invalidan la declaración y dejan la rejilla plana, con las
+         14 filas a cero y las horas apiladas. 14 filas × 1.7rem = 23.8rem.
+         El bloque y el fantasma se posicionan en px desde JS por lo mismo. */
       .cal__rows {
         position: relative;
-        height: calc(var(--half) * 28);
+        height: 23.8rem;
       }
 
       .cal__row {
         position: relative;
-        height: calc(var(--half) * 2);
+        height: 1.7rem;
         border-top: 1px solid rgba(255, 255, 255, 0.075);
+      }
+
+      @media (max-width: 30rem) {
+        .cal {
+          --gutter: 2.9rem;
+        }
+
+        .cal__rows {
+          height: 21.84rem;
+        }
+
+        .cal__row {
+          height: 1.56rem;
+        }
       }
 
       .cal__row:first-child {
@@ -1187,9 +1193,9 @@ nav: false
             return parts.join(sep || " · ");
           }
 
-          // alto de k tramos, en la misma unidad que usa la rejilla
+          // alto de k tramos, medido de la rejilla real y en px
           function span(k) {
-            return "calc(var(--half) * " + k + ")";
+            return (k * rows.getBoundingClientRect().height) / SLOTS + "px";
           }
 
           function paint() {
@@ -1356,6 +1362,11 @@ nav: false
 
           box.appendChild(wrap);
           paint();
+
+          // el bloque está en px, así que hay que recolocarlo si cambia el ancho
+          window.addEventListener("resize", function () {
+            if (document.body.contains(wrap)) paint();
+          });
         }
 
         /* el "escríbelo tú": la opción se convierte en un campo de texto */
