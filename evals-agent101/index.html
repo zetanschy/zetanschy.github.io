@@ -1,147 +1,156 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>agent_101 · pick-and-place evals</title>
-<style>
-  :root { color-scheme: light dark; --bg:#0e1016; --panel:#171a22; --line:#2b3140;
-          --fg:#e8ebf1; --mut:#8b93a3; --acc:#4c8bf5; --ok:#2ecc71; --bad:#e5533c; }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--fg);
-         font:15px/1.6 system-ui,-apple-system,Segoe UI,sans-serif; }
-  .wrap { max-width:860px; margin:0 auto; padding:36px 20px 64px; }
-  h1 { font-size:26px; margin:0 0 6px; }
-  h2 { font-size:15px; text-transform:uppercase; letter-spacing:.06em; color:var(--mut);
-       margin:34px 0 12px; font-weight:700; }
-  .sub { color:var(--mut); margin:0 0 28px; }
-  table { width:100%; border-collapse:collapse; margin:0 0 8px; font-size:14px; }
-  th,td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line);
-          vertical-align:top; }
-  th { color:var(--mut); font-weight:600; font-size:12px; text-transform:uppercase;
-       letter-spacing:.04em; }
-  td.num { font-variant-numeric:tabular-nums; white-space:nowrap; }
-  .card { display:block; background:var(--panel); border:1px solid var(--line);
-          border-radius:10px; padding:16px 18px; margin:0 0 12px; text-decoration:none;
-          color:inherit; }
-  .card:hover { border-color:var(--acc); }
-  .card .t { font-weight:700; font-size:16px; }
-  .card .d { color:var(--mut); font-size:13px; margin-top:3px; }
-  .score { font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; }
-  .win { color:var(--ok); } .lose { color:var(--bad); }
-  .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  @media (max-width:620px){ .grid { grid-template-columns:1fr; } }
-  .box { background:var(--panel); border:1px solid var(--line); border-radius:10px;
-         padding:16px 18px; }
-  code { background:#0b0d12; border:1px solid var(--line); border-radius:4px;
-         padding:1px 5px; font-size:13px; }
-  .note { color:var(--mut); font-size:13.5px; }
-  footer { color:var(--mut); font-size:13px; margin-top:40px; border-top:1px solid var(--line);
-           padding-top:16px; }
-  a { color:var(--acc); }
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inspect Robots runs</title>
+<style>:root {
+  color-scheme: light dark;
+  --bg: #f7f8fa;
+  --panel: #ffffff;
+  --text: #20242b;
+  --muted: #68707d;
+  --line: #dfe3e8;
+  --link: #245ca6;
+  --green: #19723b;
+  --green-bg: #e9f6ed;
+  --red: #a12a2a;
+  --red-bg: #fbecec;
+  --grey: #626a75;
+  --grey-bg: #eef0f2;
+  --amber: #8a5700;
+  --amber-bg: #fff5d9;
+  --neutral: #45546a;
+  --neutral-bg: #edf1f6;
+}
+@media (prefers-color-scheme: light) {
+  :root { color-scheme: light; }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111419;
+    --panel: #191d24;
+    --text: #e7eaf0;
+    --muted: #a4acb8;
+    --line: #343a45;
+    --link: #8ebcff;
+    --green: #7ed99a;
+    --green-bg: #193b27;
+    --red: #ff9b9b;
+    --red-bg: #492323;
+    --grey: #c0c5cd;
+    --grey-bg: #343943;
+    --amber: #ffd484;
+    --amber-bg: #3b2d12;
+    --neutral: #b9c9df;
+    --neutral-bg: #293342;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+header { border-bottom: 1px solid var(--line); background: var(--panel); }
+.header-inner, main { width: min(1500px, calc(100% - 32px)); margin: auto; }
+.header-inner { padding: 26px 0 20px; }
+h1 { margin: 0; font-size: 24px; font-weight: 650; }
+.meta { color: var(--muted); margin-top: 7px; }
+main { margin-bottom: 64px; }
+.toolbar { margin: 22px 0 14px; }
+label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 5px; }
+input {
+  width: min(460px, 100%);
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+}
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 10px 12px; text-align: left; vertical-align: top; }
+th {
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+td { border-top: 1px solid var(--line); }
+tbody tr:first-child td { border-top: 0; }
+tbody tr:hover { background: var(--bg); }
+a { color: var(--link); }
+.when, .policy, .metrics, .termination, .log { white-space: nowrap; }
+.instruction { min-width: 230px; max-width: 440px; }
+.error-cell { color: var(--red); min-width: 150px; max-width: 280px; overflow-wrap: anywhere; }
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.status-completed { color: var(--green); background: var(--green-bg); }
+.status-running { color: var(--amber); background: var(--amber-bg); }
+.status-error { color: var(--red); background: var(--red-bg); }
+.status-cancelled { color: var(--grey); background: var(--grey-bg); }
+.status-neutral { color: var(--neutral); background: var(--neutral-bg); }
+.errored { color: var(--red); font-weight: 650; white-space: nowrap; }
+.muted, .empty { color: var(--muted); }
+.empty { padding: 28px 12px; text-align: center; }
+tbody tr[data-href] { cursor: pointer; }</style>
 </head>
 <body>
-<div class="wrap">
-
-<h1>Pick-and-place on an SO-ARM101</h1>
-<p class="sub">An LLM agent driving the arm through tool calls, against a &pi;0.5 policy
-fine-tuned for the task. Run with
-<a href="https://github.com/robocurve/inspect-robots">Inspect Robots</a> on real
-hardware; every trial graded by the operator who watched it.</p>
-
-<div class="grid">
-  <div class="box">
-    <div class="note">GPT-6 Astra &middot; LLM agent</div>
-    <div class="score lose">1 / 3</div>
-    <div class="note">33% &middot; $4.32 of API &middot; ~8 s per decision</div>
+<header><div class="header-inner">
+  <h1>Inspect Robots runs</h1>
+  <div class="meta">2 logs</div>
+</div></header>
+<main>
+  <div class="toolbar">
+    <label for="filter">Filter runs</label>
+    <input id="filter" type="search" placeholder="instruction, policy, status, metric…">
   </div>
-  <div class="box">
-    <div class="note">&pi;0.5 (openpi, LoRA) &middot; VLA</div>
-    <div class="score win">8 / 10</div>
-    <div class="note">80% &middot; runs locally &middot; 0.43 s per inference</div>
-  </div>
-</div>
-
-<h2>Task</h2>
-<p>&ldquo;Put the cap into the red cup.&rdquo; The wording is taken verbatim from the
-&pi;0.5 checkpoint&rsquo;s fine-tuning instruction, because a VLA is only obliged to
-follow the instruction it was trained on &mdash; rewording it would hand the comparison
-to the LLM by default. Both policies get the same task object, the same embodiment and
-the same operator, and differ only in the policy.</p>
-<p class="note">The operator places the cap and cup by hand for each layout, then
-answers y/n after watching. Nothing on this rig can detect a cap entering a cup, so
-there is no automatic scorer.</p>
-
-<h2>Per-trial results</h2>
-
-<table>
-  <tr><th>GPT-6 Astra</th><th class="num">verdict</th><th>what happened</th></tr>
-  <tr><td>layout-near</td><td class="num">y</td><td>collided with the red cup</td></tr>
-  <tr><td>layout-left</td><td class="num">n</td><td>failed to grasp twice, then reported it had grasped the cup when it had not</td></tr>
-  <tr><td>layout-near (2)</td><td class="num">n</td><td>failed to grasp three times as commanded</td></tr>
-</table>
-
-<table>
-  <tr><th>&pi;0.5</th><th class="num">verdicts</th><th>what happened</th></tr>
-  <tr><td>layout-near</td><td class="num">y, n</td><td>second attempt: too close, arm obstructed the cup from the top camera</td></tr>
-  <tr><td>layout-left</td><td class="num">y, y</td><td></td></tr>
-  <tr><td>layout-right</td><td class="num">y, y</td><td></td></tr>
-  <tr><td>layout-far</td><td class="num">y, y</td><td></td></tr>
-  <tr><td>layout-close-pair</td><td class="num">n, y</td><td>first attempt: slow to grasp, then failed and pushed the cup out of reach</td></tr>
-</table>
-
-<h2>Full reports</h2>
-<a class="card" href="astra.html">
-  <div class="t">GPT-6 Astra &rarr;</div>
-  <div class="d">3 trials &middot; per-trial video, the agent&rsquo;s tool-call transcript,
-    and the raw API exchanges. 34 MB.</div>
-</a>
-<a class="card" href="openpi.html">
-  <div class="t">&pi;0.5 (openpi) &rarr;</div>
-  <div class="d">10 trials &middot; scores, operator notes, and video for the first trial.
-    17 MB.</div>
-</a>
-
-<h2>Reading this honestly</h2>
-<ul class="note">
-  <li><b>Three trials against ten.</b> Astra&rsquo;s 1/3 and &pi;0.5&rsquo;s 8/10 are not
-    equally well measured. At three trials the confidence interval is wide enough to
-    include much better and much worse than 33%.</li>
-  <li><b>Astra&rsquo;s one success collided with the cup.</b> It counted because the cap
-    ended up in the cup, which is what the instruction asked for.</li>
-  <li><b>The third Astra trial was assembled from an interrupted run.</b> The operator
-    cancelled the episode before the verdict prompt; the trial itself ran 38 decisions
-    and its outcome was watched. The report records that substitution, including the
-    original status, rather than presenting it as a clean run.</li>
-  <li><b>Cost is only defined for one side.</b> &pi;0.5 runs on a local GPU, so its
-    trials carry no token bill &mdash; not that they are free. Comparing the two on cost
-    means first deciding what local inference is worth.</li>
-  <li><b>Nothing here is a benchmark result.</b> One arm, one bench, one operator,
-    one afternoon.</li>
-</ul>
-
-<h2>How it ran</h2>
-<table>
-  <tr><th></th><th>GPT-6 Astra</th><th>&pi;0.5</th></tr>
-  <tr><td>control</td><td>tool calls &rarr; absolute joint targets, interpolated</td><td>50-action chunks, replanned every 15</td></tr>
-  <tr><td>decision rate</td><td class="num">~8 s (6.0 s model latency + motion)</td><td class="num">0.43 s per inference</td></tr>
-  <tr><td>observation</td><td>2 cameras + joint state, in the prompt</td><td>2 cameras + joint state</td></tr>
-  <tr><td>budget</td><td class="num">40 LLM calls per trial</td><td class="num">120 s per trial</td></tr>
-  <tr><td>total</td><td class="num">79 calls, 391k in / 8.2k out tokens</td><td class="num">841 s, 9264 control steps</td></tr>
-</table>
-<p class="note">Astra&rsquo;s input tokens grow through a trial as camera frames
-accumulate in the conversation &mdash; 1.5k on the first call, 9.6k by the 38th &mdash;
-so a longer trial costs superlinearly. Cached-token reads were zero throughout, so none
-of it billed at the cached rate.</p>
-
-<footer>
-Built with <a href="https://github.com/robocurve/inspect-robots">Inspect Robots</a>
-and <a href="https://github.com/huggingface/lerobot">LeRobot</a> on an
-<a href="https://github.com/TheRobotStudio/SO-ARM100">SO-ARM101</a>.
-Logs, harness and adapters: <code>agent_101/evals</code>.
-</footer>
-
-</div>
+  <div class="table-wrap"><table>
+    <thead><tr>
+      <th>When</th><th>Instruction</th><th>Policy</th><th>Status</th>
+      <th>Metrics</th><th>Termination</th><th>Error</th><th>Log</th>
+    </tr></thead>
+    <tbody><tr data-href="so101-cap-to-cup_f750e49a.html"><td class="when"><time>2026-09-07T05:08:33.420404+00:00</time></td><td class="instruction"><a href="so101-cap-to-cup_f750e49a.html">Put the cap into the red cup</a></td><td class="policy">openpi</td><td><span class="badge status-completed">completed</span></td><td class="metrics">operator=0.8</td><td class="termination">ended by operator</td><td class="error-cell"></td><td class="log"><a href="so101-cap-to-cup_f750e49a.html">so101-cap-to-cup_f750e49a.json</a></td></tr><tr data-href="so101-cap-to-cup_astra3.html"><td class="when"><time>2026-09-07T04:18:50.529002+00:00</time></td><td class="instruction"><a href="so101-cap-to-cup_astra3.html">Put the cap into the red cup</a></td><td class="policy">agent <span class="muted">/ gpt-6-astra</span></td><td><span class="badge status-completed">completed</span></td><td class="metrics">operator=0.3333</td><td class="termination">reported done, ended by operator</td><td class="error-cell"></td><td class="log"><a href="so101-cap-to-cup_astra3.html">so101-cap-to-cup_astra3.json</a></td></tr></tbody>
+  </table></div>
+</main>
+<script>
+const key = "inspect-robots-index-filter", input = document.querySelector("#filter");
+const rows = document.querySelectorAll("tbody tr:not(.empty)");
+function applyFilter() {
+  const query = input.value.toLocaleLowerCase();
+  rows.forEach(row => row.hidden = !row.textContent.toLocaleLowerCase().includes(query));
+  try { localStorage.setItem(key, input.value); } catch (_) {}
+}
+try { input.value = localStorage.getItem(key) || ""; } catch (_) {}
+input.addEventListener("input", applyFilter);
+applyFilter();
+document.querySelector("tbody").addEventListener("click", event => {
+  const row = event.target.closest("tr[data-href]");
+  if (!row || event.target.closest("a") || getSelection().toString()) return;
+  if (event.shiftKey || event.altKey) return;
+  if (event.metaKey || event.ctrlKey) {
+    const opened = window.open(row.dataset.href, "_blank");
+    if (opened) opened.opener = null;
+  } else {
+    location.href = row.dataset.href;
+  }
+});
+</script>
 </body>
 </html>
