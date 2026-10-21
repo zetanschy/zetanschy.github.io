@@ -95,6 +95,9 @@
         {% assign author_is_self = false %}
         {%- assign author_last_name = author.last | regex_replace: '[*∗†‡§¶‖&^]', '' -%}
         {%- assign author_last_html = author.last | regex_replace: '([*∗†‡§¶‖&^]+)', '<sup>\1</sup>' -%}
+        {%- if author.prefix != blank -%}
+          {%- assign author_last_html = author_last_html | prepend: ' ' | prepend: author.prefix -%}
+        {%- endif -%}
         {% if site.scholar.last_name contains author_last_name %}
           {% if site.scholar.first_name contains author.first %}
             {% assign author_is_self = true %}
@@ -272,6 +275,23 @@
         </a>
         {% assign pub_n = pub_n | plus: 1 %}
       {% endif %}
+      <!-- Posters: `poster` and `poster2` (file in /assets/pdf/ or full URL), labelled by `poster_label` / `poster2_label` -->
+      {% assign poster_keys = 'poster,poster2' | split: ',' %}
+      {% for poster_key in poster_keys %}
+        {% assign poster_file = entry[poster_key] %}
+        {% if poster_file and pub_n < pub_max %}
+          {% if poster_file contains '://' %}
+            {% assign poster_href = poster_file %}
+          {% else %}
+            {% capture poster_href %}{{ poster_file | prepend: '/assets/pdf/' | relative_url }}{% endcapture %}
+          {% endif %}
+          {% assign poster_label_key = poster_key | append: '_label' %}
+          <a href="{{ poster_href }}" class="btn btn-sm z-depth-0" role="button" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-file-image" aria-hidden="true"></i> {{ entry[poster_label_key] | default: 'Poster' }}
+          </a>
+          {% assign pub_n = pub_n | plus: 1 %}
+        {% endif %}
+      {% endfor %}
     </div>
     {% if site.enable_publication_badges %}
       {% assign entry_has_altmetric_badge = false %}
