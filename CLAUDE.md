@@ -7,10 +7,12 @@ Personal academic site of Jans Solano (robotics engineer at Robot.com; previousl
 Pushing to `master` is the deploy. `.github/workflows/deploy.yml` runs `JEKYLL_ENV=production bundle exec jekyll build`, purges unused CSS, and publishes `_site/` to the `gh-pages` branch, which GitHub Pages serves. The live site updates a few minutes after the push.
 
 1. **Preview locally and show the user before pushing** (see below). They review content changes before anything goes live.
-2. Format what you touched (prettier and the Liquid plugin are already in `node_modules`; `.bib` files are not formatted):
+2. Make the Prettier check pass. `.github/workflows/prettier.yml` runs `npx prettier . --check` on every push and emails the user when it fails, so run the same check across the whole repo, not just your files. CI installs Prettier from `package-lock.json`, so the local `node_modules` gives the same result.
    ```bash
-   npx prettier --write _layouts/about.liquid _config.yml   # list the changed files
+   npx prettier . --check
+   npx prettier --write <files it lists>
    ```
+   Don't reformat generated HTML (such as eval reports) or the TOC-managed al-folio docs (`CUSTOMIZE.md`, `INSTALL.md`, …). The TOC bot rewrites them in a style Prettier rejects, so a reformat would just fail again on the bot's next commit. Add such paths to `.prettierignore` instead.
 3. Stage specific files (never `git add -A`), then commit with a short lowercase subject such as `add yale research` or `update cv`, no body:
    ```bash
    git add <files>
@@ -21,7 +23,12 @@ Pushing to `master` is the deploy. `.github/workflows/deploy.yml` runs `JEKYLL_E
    git pull --rebase origin master && git push origin master
    ```
 
-The `gh` CLI is not installed. Deploy runs are at https://github.com/zetanschy/zetanschy.github.io/actions.
+The `gh` CLI is not installed. Check workflow results after a push through the public API (or https://github.com/zetanschy/zetanschy.github.io/actions):
+
+```bash
+curl -s "https://api.github.com/repos/zetanschy/zetanschy.github.io/actions/runs?head_sha=$(git rev-parse HEAD)" \
+  | python3 -c "import sys,json; [print(r['name'], r['status'], r['conclusion']) for r in json.load(sys.stdin)['workflow_runs']]"
+```
 
 ## Local preview
 
